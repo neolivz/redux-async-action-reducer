@@ -1,6 +1,6 @@
 {
   "name": "redux-thunk-action-reducer",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Redux Action Reducer with redux thunk",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
