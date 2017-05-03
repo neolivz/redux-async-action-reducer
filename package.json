@@ -1,0 +1,31 @@
+{
+  "name": "redux-thunk-action-reducer",
+  "version": "0.0.3",
+  "description": "Redux Action Reducer with redux thunk",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neolivz/redux-thunk-action-reducer.git"
+  },
+  "keywords": [
+    "redux",
+    "redux-thunk",
+    "action",
+    "reducer",
+    "async"
+  ],
+  "author": "Jishnu Viswanath",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neolivz/redux-thunk-action-reducer/issues"
+  },
+  "homepage": "https://github.com/neolivz/redux-thunk-action-reducer#readme",
+  "devDependencies": {
+    "typescript": "^2.3.2"
+  }
+}
