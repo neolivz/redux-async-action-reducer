@@ -8,11 +8,13 @@ export const FAILURE = 'FAILURE';
 
 //Generics in this page have convention of 
 //T -> Type,
-//R -> Request, 
-//S -> reSponse
+//Q -> Query/reQuest, 
+//R -> Response
+//S -> Store
+//A -> Action
 
-export type ActionRequest<R> = { request: R }
-export type ActionResponse<S> = { response: S }
+export type ActionRequest<Q> = { request: Q }
+export type ActionResponse<R> = { response: R }
 export type ActionStatusStarted = { status: STARTED };
 export type ActionStatusSuccess = { status: SUCCESS };
 export type ActionStatusFailure = { status: FAILURE };
@@ -20,64 +22,64 @@ export type ActionError = { error: Error }
 export type ActionType<T> = { type: T }
 
 
-export type ActionSimple<T, R> = ActionType<T> & ActionRequest<R>;
-export type ActionSuccess<T, R, S> = ActionStatusSuccess & ActionSimple<T, R> & ActionResponse<S>;
-export type ActionFailure<T, R> = ActionStatusFailure & ActionSimple<T, R> & ActionError;
-export type ActionStarted<T, R> = ActionStatusStarted & ActionSimple<T, R>;
-export type AsyncAction<T, R, S> = ActionSuccess<T, R, S> | ActionFailure<T, R> | ActionStarted<T, R>;
+export type SimpleAction<T, Q> = ActionType<T> & ActionRequest<Q>;
+export type ActionSuccess<T, Q, R> = ActionStatusSuccess & SimpleAction<T, Q> & ActionResponse<R>;
+export type ActionFailure<T, Q> = ActionStatusFailure & SimpleAction<T, Q> & ActionError;
+export type ActionStarted<T, Q> = ActionStatusStarted & SimpleAction<T, Q>;
+export type AsyncAction<T, Q, R> = ActionSuccess<T, Q, R> | ActionFailure<T, Q> | ActionStarted<T, Q>;
 
 
-export interface ApiActionGroup<T, R, S> {
-    request: (q?: R) => ActionStarted<T, R>
-    success: (s: S, q?: R) => ActionSuccess<T, R, S>
-    error: (e: Error, q?: R) => ActionFailure<T, R>
+export interface ApiActionGroup<T, Q, R> {
+    request: (q?: Q) => ActionStarted<T, Q>
+    success: (s: R, q?: Q) => ActionSuccess<T, Q, R>
+    error: (e: Error, q?: Q) => ActionFailure<T, Q>
 }
 
-export interface Dispatch<T, R, S> {
-    <A extends AsyncAction<T, R, S>>(action: A): A;
+export interface Dispatch<T, Q, R> {
+    <A extends AsyncAction<T, Q, R>>(action: A): A;
 }
 
-export interface Dispatcher<T, R, S> {
-    (dispatch: Dispatch<T, R, S>): Promise<S>;
+export interface Dispatcher<T, Q, R> {
+    (dispatch: Dispatch<T, Q, R>): Promise<R>;
 }
 
-export interface AsyncActionCreatorReponse<T, R, S> {
-    (request?: R): Dispatcher<T, R, S>;
+export interface AsyncActionCreatorReponse<T, Q, R> {
+    (request?: Q): Dispatcher<T, Q, R>;
 }
 
-export interface SimpleActionCreatorResponse<T, R> {
-    (request?: R): ActionSimple<T, R>
+export interface SimpleActionCreatorResponse<T, Q> {
+    (request?: Q): SimpleAction<T, Q>
 }
 
-export interface ApiFunc<R, S> {
-    (q: R): Promise<S>
+export interface ApiFunc<Q, R> {
+    (q: Q): Promise<R>
 }
 
-export interface AsynActionCreator<T, R, S> {
-    (t: T, fn: ApiFunc<R, S>): AsyncActionCreatorReponse<T, R, S>
+export interface AsynActionCreator<T, Q, R> {
+    (t: T, fn: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R>
 }
 
-export interface SimpleActionCreator<T, R> {
-    (t: T): SimpleActionCreatorResponse<T, R>
+export interface SimpleActionCreator<T, Q> {
+    (t: T): SimpleActionCreatorResponse<T, Q>
 }
 
-export function apiActionGroupCreator<T, R, S>(type: T): ApiActionGroup<T, R, S> {
+export function apiActionGroupCreator<T, Q, R>(type: T): ApiActionGroup<T, Q, R> {
     return {
-        request: (request: R) =>
+        request: (request: Q) =>
             ({ type, status: STARTED, request, }),
-        success: (response: S, request: R) =>
+        success: (response: R, request: Q) =>
             ({ type, status: SUCCESS, request, response }),
-        error: (error, request: R) =>
+        error: (error, request: Q) =>
             ({ type, status: FAILURE, request, error }),
     }
 }
 
 //Factory to generate Async actions
-//Expects ApiActionGroup<T,R,S> and ApiFunc<R,S>
-export function apiActionGroupFactory<T, R, S>
-    (ag: ApiActionGroup<T, R, S>, go: ApiFunc<R, S>): AsyncActionCreatorReponse<T, R, S> {
-    return (request?: R) =>
-        (dispatch: Dispatch<T, R, S>): Promise<any> => {
+//Expects ApiActionGroup<T,R,S> and ApiFunc<Q,S>
+export function apiActionGroupFactory<T, Q, R>
+    (ag: ApiActionGroup<T, Q, R>, go: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R> {
+    return (request?: Q) =>
+        (dispatch: Dispatch<T, Q, R>): Promise<any> => {
             dispatch(ag.request(request));
             return go(request)
                 .then((response) => dispatch(ag.success(response, request)))
@@ -85,12 +87,12 @@ export function apiActionGroupFactory<T, R, S>
         }
 }
 
-export function createAsyncAction<T, R, S>(t: T, go: ApiFunc<R, S>): AsyncActionCreatorReponse<T, R, S> {
+export function createAsyncAction<T, Q, R>(t: T, go: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R> {
     return apiActionGroupFactory(apiActionGroupCreator(t), go)
 }
 
-export function createSimpleAction<T, R>(type: T): SimpleActionCreatorResponse<T, R> {
-    return (request: R) => {
+export function createSimpleAction<T, Q>(type: T): SimpleActionCreatorResponse<T, Q> {
+    return (request: Q) => {
         return { type, request }
     }
 }
