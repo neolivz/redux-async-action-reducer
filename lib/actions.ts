@@ -52,7 +52,7 @@ export interface SimpleActionCreatorResponse<T, Q> {
 }
 
 export interface ApiFunc<Q, R> {
-    (q: Q): Promise<R>
+(q?: Q): Promise<R>
 }
 
 export interface AsynActionCreator<T, Q, R> {
