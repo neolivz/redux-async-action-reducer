@@ -1,6 +1,6 @@
 {
   "name": "redux-thunk-action-reducer",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "description": "Redux Action Reducer with redux thunk",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -26,6 +26,10 @@
   },
   "homepage": "https://github.com/neolivz/redux-thunk-action-reducer#readme",
   "devDependencies": {
+    "tslint-config-standard": "^5.0.2",
     "typescript": "^2.3.2"
+  },
+  "dependencies": {
+    "tslint": "^5.3.2"
   }
 }
