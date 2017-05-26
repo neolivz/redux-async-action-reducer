@@ -6,6 +6,7 @@
         "space-before-function-paren": false,
         "trailing-comma": [
             true
-        ]
+        ],
+        "ter-indent": [true, "tab"]
     }
 }
