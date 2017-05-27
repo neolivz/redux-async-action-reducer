@@ -104,6 +104,33 @@ describe('Asyn Reducer Generator Fn', () => {
 		).toEqual({ ...initialState, working: false, completed: false, failure: true, error: Error('Fail') })
 	})
 })
+describe('Asyn Reducer Generator Fn With optional functions', () => {
+
+	let failureFn: AsyncReducerGeneratorFn<any, any, any> =
+		(state: AsyncStore<any>, request: any, response: any, error: Error) => (
+			{ ...state, working: false, completed: false, failure: true, error }
+		)
+	let reducer: AsyncReducer<any, any, any, any>
+	beforeEach(() => {
+		reducer = asyncReducerGenerator('ANY', undefined, undefined, failureFn)
+	})
+
+	it('should get start fn output', () => {
+		expect(
+			reducer(initialState, { type: 'ANY', request: undefined, status: 'STARTED' })
+		).toMatchObject({ ...initialState, working: true, completed: false, failure: false })
+	})
+	it('should get success fn output', () => {
+		expect(
+			reducer(initialState, { type: 'ANY', request: undefined, status: 'SUCCESS', response: 'Response' })
+		).toMatchObject({ ...initialState, working: false, completed: true, failure: false, store: 'Response' })
+	})
+	it('should get failure fn output', () => {
+		expect(
+			reducer(initialState, { type: 'ANY', request: undefined, status: 'FAILURE', error: Error('Fail') })
+		).toEqual({ ...initialState, working: false, completed: false, failure: true, error: Error('Fail') })
+	})
+})
 
 describe('Simple Async Reducer Generator Fn', () => {
 	let reducer: AsyncReducer<any, any, any, any>
@@ -128,10 +155,10 @@ describe('Simple Async Reducer Generator Fn', () => {
 	})
 })
 
-describe('Simple Async Reducer Generator Fn', () => {
+describe('Async Array Reducer: Create', () => {
 	let reducer: AsyncReducer<any, any, any, any>
 	beforeEach(() => {
-		reducer = simpleAsyncReducerGenerator('ANY')
+		reducer = arrayAsyncCreateReducerGenerator('ANY')
 	})
 
 	it('should get start fn output', () => {
@@ -140,13 +167,69 @@ describe('Simple Async Reducer Generator Fn', () => {
 		).toMatchObject({ ...initialState, working: true, completed: false, failure: false })
 	})
 	it('should get success fn output', () => {
+		const tempStore = reducer(initialState, { type: 'ANY', request: undefined, status: 'SUCCESS', response: 'Response1' })
 		expect(
-			reducer(initialState, { type: 'ANY', request: undefined, status: 'SUCCESS', response: 'Response' })
-		).toMatchObject({ ...initialState, working: false, completed: true, failure: false, store: 'Response' })
+			tempStore
+		).toMatchObject({ ...initialState, working: false, completed: true, failure: false, store: ['Response1'] })
+		expect(
+			reducer(tempStore, { type: 'ANY', request: undefined, status: 'SUCCESS', response: 'Response2' })
+		).toMatchObject({ ...initialState, working: false, completed: true, failure: false, store: ['Response1', 'Response2'] })
 	})
 	it('should get failure fn output', () => {
 		expect(
 			reducer(initialState, { type: 'ANY', request: undefined, status: 'FAILURE', error: Error('Fail') })
 		).toMatchObject({ ...initialState, working: false, completed: false, failure: true, error: Error('Fail') })
+	})
+})
+describe('Async Array Reducer: Read/Load', () => {
+	let reducer: AsyncReducer<any, any, any, any>
+	beforeEach(() => {
+		reducer = arrayAsyncLoadReducerGenerator('ANY')
+	})
+
+	it('should get start fn output', () => {
+		expect(
+			reducer(initialState, { type: 'ANY', request: undefined, status: 'STARTED' })
+		).toMatchObject({ ...initialState, working: true, completed: false, failure: false })
+	})
+	it('should get success fn output', () => {
+		const tempStore = reducer(initialState, { type: 'ANY', request: undefined, status: 'SUCCESS', response: ['Response1', 'Response2'] })
+		expect(
+			tempStore
+		).toMatchObject({ ...initialState, working: false, completed: true, failure: false, store: ['Response1', 'Response2'] })
+		expect(
+			reducer(tempStore, { type: 'ANY', request: undefined, status: 'SUCCESS', response: ['Response2'] })
+		).toMatchObject({ ...initialState, working: false, completed: true, failure: false, store: ['Response2'] })
+	})
+	it('should get failure fn output', () => {
+		expect(
+			reducer(initialState, { type: 'ANY', request: undefined, status: 'FAILURE', error: Error('Fail') })
+		).toMatchObject({ ...initialState, working: false, completed: false, failure: true, error: Error('Fail') })
+	})
+})
+describe('Async Array Reducer: Delete', () => {
+	let reducer: AsyncReducer<any, any, any, any>
+	const store = ['Response1', 'Response2', 'Response3']
+	let tempStore = arrayAsyncLoadReducerGenerator<any, any, any, any>('ANY')(initialState,
+		{ type: 'ANY', request: undefined, status: 'SUCCESS', response: store })
+	beforeEach(() => {
+		reducer = arrayAsyncDeleteReducerGenerator('ANY')
+	})
+
+	it('should get start fn output', () => {
+		expect(
+			reducer(tempStore, { type: 'ANY', request: undefined, status: 'STARTED' })
+		).toMatchObject({ ...tempStore, working: true, completed: false, failure: false, store })
+	})
+	it('should get success fn output', () => {
+
+		expect(
+			reducer(tempStore, { type: 'ANY', request: 'Response2', status: 'SUCCESS', response: '' })
+		).toMatchObject({ ...initialState, working: false, completed: true, failure: false, store: ['Response1', 'Response3'] })
+	})
+	it('should get failure fn output', () => {
+		expect(
+			reducer(tempStore, { type: 'ANY', request: undefined, status: 'FAILURE', error: Error('Fail') })
+		).toMatchObject({ ...initialState, working: false, completed: false, failure: true, store, error: Error('Fail') })
 	})
 })

@@ -8,7 +8,8 @@
     "test": "jest",
     "lint": "tslint -c tslint.json 'lib/**/*.ts'",
     "prepublish": "npm run build",
-    "build": "tsc"
+    "build": "tsc",
+    "debug": "node --debug-brk=5090 --inspect ./node_modules/jest/bin/jest -i"
   },
   "repository": {
     "type": "git",
@@ -34,7 +35,7 @@
       "js"
     ],
     "transform": {
-      "^.+\\.(ts|tsx)$": "<rootDir>/preprocessor.js"
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testMatch": [
       "**/tests/*.spec.(ts|tsx|js)"
@@ -43,6 +44,7 @@
   "devDependencies": {
     "@types/jest": "^19.2.3",
     "jest": "^20.0.4",
+    "ts-jest": "^20.0.4",
     "ts-node": "^3.0.4",
     "tslint-config-standard": "^5.0.2",
     "typescript": "^2.3.3"
