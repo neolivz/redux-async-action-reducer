@@ -20,10 +20,16 @@ describe('Should Reducer Execute', () => {
 	})
 })
 describe('Empty Create reducer', () => {
-	const emptyReducer = createReducer()
+	const emptyReducer = createReducer(initialState)
 	it('Should return state as is with any action', () => {
 		const myStore = { store: 'myStore' }
 		expect(emptyReducer(myStore, { type: 'ANY' })).toEqual(myStore)
+	})
+})
+describe('Empty Create reducer with undefined state should return initial state', () => {
+	const emptyReducer = createReducer(initialState)
+	it('Should return state as is with any action', () => {
+		expect(emptyReducer(undefined, { type: 'ANY' })).toEqual(initialState)
 	})
 })
 
@@ -31,9 +37,9 @@ describe('Create only with sync reducer', () => {
 	const s1 = jest.fn((state, action) => state)
 	const s2 = jest.fn((state, action) => state)
 	const syncReducers: SyncReducer<any, any, any>[] = [s1, s1, s2]
-	const syncCreateReducer = createReducer(syncReducers)
+	const syncCreateReducer = createReducer(initialState, syncReducers)
 	it('Should return state as is with any action and invoke sync reducers', () => {
-		expect(syncCreateReducer(initialState, { type: 'ANY' })).toEqual(initialState)
+		expect(syncCreateReducer(undefined, { type: 'ANY' })).toEqual(initialState)
 		expect(s1.mock.calls.length).toBe(2) // as we have 2 times in sync reducer
 		expect(s2.mock.calls.length).toBe(1)
 		expect(s1.mock.calls[0]).toEqual([initialState, { type: 'ANY' }])
@@ -41,12 +47,24 @@ describe('Create only with sync reducer', () => {
 		expect(s2.mock.calls[0]).toEqual([initialState, { type: 'ANY' }])
 	})
 })
+describe('Create only with sync reducer', () => {
+	const s1 = jest.fn((state, action) => state)
+	const s2 = jest.fn((state, action) => state)
+	const syncReducers: SyncReducer<any, any, any>[] = [s1, s1, s2]
+	const syncCreateReducer = createReducer(initialState, syncReducers)
+	it('Should return state as is with any action and invoke sync reducers', () => {
+		expect(syncCreateReducer({}, { type: 'ANY' })).toEqual({})
+		expect(s1.mock.calls.length).toBe(0) // as we have 2 times in sync reducer
+		expect(s2.mock.calls.length).toBe(0)
+
+	})
+})
 
 describe('Create only with async reducer', () => {
 	const s1 = jest.fn((state, action) => state)
 	const s2 = jest.fn((state, action) => state)
 	const asyncReducers: AsyncReducer<any, any, any, any>[] = [s1, s2, s1]
-	const syncCreateReducer = createReducer(undefined, asyncReducers)
+	const syncCreateReducer = createReducer(initialState, undefined, asyncReducers)
 	it('Should return state as is with any action and invoke async reducers', () => {
 		expect(syncCreateReducer(initialState, { type: 'ANY' })).toEqual(initialState)
 		expect(s1.mock.calls.length).toBe(2) // as we have 2 times in sync reducer
@@ -62,7 +80,7 @@ describe('Create  with both sync and async reducer', () => {
 	const s2 = jest.fn((state, action) => state)
 	const syncReducers: SyncReducer<any, any, any>[] = [s1, s1]
 	const asyncReducers: AsyncReducer<any, any, any, any>[] = [s2]
-	const syncCreateReducer = createReducer(syncReducers, asyncReducers)
+	const syncCreateReducer = createReducer(initialState, syncReducers, asyncReducers)
 	it('Should return state as is with any action', () => {
 		expect(syncCreateReducer(initialState, { type: 'ANY' })).toEqual(initialState)
 		expect(s1.mock.calls.length).toBe(2) // as we have 2 times in sync reducer
@@ -80,9 +98,9 @@ describe('Create  with both sync and async reducer with state change', () => {
 	const as2 = jest.fn((state, action) => ({ ...state, store: 3 }))
 	const syncReducers: SyncReducer<any, any, any>[] = [s1, s2]
 	const asyncReducers: AsyncReducer<any, any, any, any>[] = [as1, as2]
-	const syncCreateReducer = createReducer(syncReducers, asyncReducers)
+	const syncCreateReducer = createReducer(initialState, syncReducers, asyncReducers)
 	it('Should return state as is with any action', () => {
-		expect(syncCreateReducer(initialState, { type: 'ANY' })).toEqual({ ...initialState, store: 3 })
+		expect(syncCreateReducer(undefined, { type: 'ANY' })).toEqual({ ...initialState, store: 3 })
 		expect(s1.mock.calls.length).toBe(1) // as we have 2 times in sync reducer
 		expect(s2.mock.calls.length).toBe(1)
 		expect(as1.mock.calls.length).toBe(1)
@@ -100,7 +118,7 @@ describe('Create  with both sync and async reducer with non async state', () => 
 	const as2 = jest.fn((state, action) => ({ ...state, store: 3 }))
 	const syncReducers: SyncReducer<any, any, any>[] = [s1, s2]
 	const asyncReducers: AsyncReducer<any, any, any, any>[] = [as1, as2]
-	const syncCreateReducer = createReducer(syncReducers, asyncReducers)
+	const syncCreateReducer = createReducer({ store: 1 }, syncReducers, asyncReducers)
 	it('Should return state as is with any action', () => {
 		expect(syncCreateReducer({ store: 0 }, { type: 'ANY' })).toEqual({ store: 1 })
 		expect(s1.mock.calls.length).toBe(1) // as we have 2 times in sync reducer

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const async_reducer_1 = require("./async-reducer");
+const sync_reducer_1 = require("./sync-reducer");
 function shouldReducerExecute(type, action) {
     // if type is an array and action type exists in the array it should execute
     // if type is string and exactly matching with action type
@@ -10,12 +11,17 @@ function shouldReducerExecute(type, action) {
         || (typeof (type) === 'undefined');
 }
 exports.shouldReducerExecute = shouldReducerExecute;
-exports.createReducer = (syncReducers, asyncReducers) => {
+exports.createReducer = (initialState, syncReducers, asyncReducers) => {
     return (state, action) => {
+        if (typeof (state) === 'undefined') {
+            state = initialState;
+        }
         // We invoke all the sync reducer
         syncReducers && syncReducers.forEach((reducer) => {
             // After each reducer new state will be assigned to state object
-            state = reducer(state, action);
+            if (sync_reducer_1.isSyncStore(state)) {
+                state = reducer(state, action);
+            }
         });
         asyncReducers && asyncReducers.forEach((reducer) => {
             // If state is not AsyncStore we should not invoke async reducers

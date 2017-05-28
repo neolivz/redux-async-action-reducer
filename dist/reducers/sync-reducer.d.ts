@@ -9,6 +9,7 @@ export interface SyncReducerGeneratorFn<Q, S> {
 export interface SyncReducerGenerator {
     <T, Q, S>(type?: T, fn?: SyncReducerGeneratorFn<Q, S>): SyncReducer<T, Q, S>;
 }
+export declare const isSyncStore: (store: any) => store is SimpleStore<any>;
 export declare const syncReducerGenerator: SyncReducerGenerator;
 export declare const syncReducer: SyncReducerGenerator;
 export declare const arraySyncCreateReducerGenerator: SyncReducerGenerator;

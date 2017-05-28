@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const actions_1 = require("../actions");
 const reducer_common_1 = require("./reducer-common");
+exports.isSyncStore = (store) => {
+    return typeof (store) !== 'undefined' && store.hasOwnProperty('store');
+};
 const defaultSyncReducerFn = () => {
     return (state, request) => state;
 };

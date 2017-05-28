@@ -22,7 +22,7 @@ export interface AsyncReducerGenerator {
     <T, Q, R, S>(type?: T, startFn?: AsyncReducerGeneratorFn<Q, R, S>, successFn?: AsyncReducerGeneratorFn<Q, R, S>, failureFn?: AsyncReducerGeneratorFn<Q, R, S>): AsyncReducer<T, Q, R, S>;
 }
 export declare const initialState: AsyncStore<any>;
-export declare const isAsyncStore: (store: SimpleStore<any>) => store is AsyncStore<any>;
+export declare const isAsyncStore: (store: any) => store is AsyncStore<any>;
 export declare const asyncReducerGenerator: AsyncReducerGenerator;
 export declare const simpleAsyncReducerGenerator: AsyncReducerGenerator;
 export declare const arrayAsyncCreateReducerGenerator: AsyncReducerGenerator;

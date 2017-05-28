@@ -38,8 +38,8 @@ export const initialState: AsyncStore<any> = {
 	store: undefined,
 }
 
-export const isAsyncStore = (store: SimpleStore<any>): store is AsyncStore<any> => {
-	return store.hasOwnProperty('working')
+export const isAsyncStore = (store: any): store is AsyncStore<any> => {
+	return typeof (store) !== 'undefined' && store.hasOwnProperty('working')
 }
 
 function defaultStartReducerFn<Q, R, S>() {

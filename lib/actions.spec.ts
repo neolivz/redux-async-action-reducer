@@ -1,5 +1,5 @@
 import actions from './actions'
-import { SimpleActionCreatorResponse, AsyncActionCreatorReponse, ApiFunc } from './actions'
+import { SimpleActionCreatorResponse, AsyncActionCreatorResponse, ApiFunc } from './actions'
 
 const { createAsyncAction, createSimpleAction } = actions
 
@@ -29,7 +29,7 @@ describe('Create Async Action: SUCCESS', () => {
 	let api: ApiFunc<any, any> = jest.fn(() => Promise.resolve())
 	let dispatch = jest.fn()
 
-	let asyncString: AsyncActionCreatorReponse<string, string, string> = createAsyncAction<string, string, string>('CREATE', api)
+	let asyncString: AsyncActionCreatorResponse<string, string, string> = createAsyncAction<string, string, string>('CREATE', api)
 
 	beforeEach(() => {
 		asyncString()(dispatch)
@@ -47,7 +47,7 @@ describe('Create Async Action: FAILURE', () => {
 	let api: ApiFunc<any, any> = jest.fn(() => Promise.reject(error))
 	let dispatch = jest.fn()
 
-	let asyncString: AsyncActionCreatorReponse<string, string, string> =
+	let asyncString: AsyncActionCreatorResponse<string, string, string> =
 		createAsyncAction<string, string, string>('CREATE', api)
 
 	beforeEach(() => {

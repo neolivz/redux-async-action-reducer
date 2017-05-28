@@ -9,7 +9,7 @@ exports.initialState = {
     store: undefined,
 };
 exports.isAsyncStore = (store) => {
-    return store.hasOwnProperty('working');
+    return typeof (store) !== 'undefined' && store.hasOwnProperty('working');
 };
 function defaultStartReducerFn() {
     const startFn = (state) => {

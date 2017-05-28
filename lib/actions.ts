@@ -42,7 +42,7 @@ export interface Dispatcher<T, Q, R> {
 	(dispatch: Dispatch<T, Q, R>): Promise<R>
 }
 
-export interface AsyncActionCreatorReponse<T, Q, R> {
+export interface AsyncActionCreatorResponse<T, Q, R> {
 	(request?: Q): Dispatcher<T, Q, R>
 }
 
@@ -55,7 +55,7 @@ export interface ApiFunc<Q, R> {
 }
 
 export interface AsynActionCreator<T, Q, R> {
-	(t: T, fn: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R>
+	(t: T, fn: ApiFunc<Q, R>): AsyncActionCreatorResponse<T, Q, R>
 }
 
 export interface SimpleActionCreator<T, Q> {
@@ -83,7 +83,7 @@ export function apiActionGroupCreator<T, Q, R>(type: T): ApiActionGroup<T, Q, R>
 // Factory to generate Async actions
 // Expects ApiActionGroup<T,R,S> and ApiFunc<Q,S>
 export function apiActionGroupFactory<T, Q, R>
-	(ag: ApiActionGroup<T, Q, R>, go: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R> {
+	(ag: ApiActionGroup<T, Q, R>, go: ApiFunc<Q, R>): AsyncActionCreatorResponse<T, Q, R> {
 	return (request?: Q) =>
 		(dispatch: Dispatch<T, Q, R>): Promise<any> => {
 			dispatch(ag.request(request))
@@ -93,7 +93,7 @@ export function apiActionGroupFactory<T, Q, R>
 		}
 }
 
-export function createAsyncAction<T, Q, R>(t: T, go: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R> {
+export function createAsyncAction<T, Q, R>(t: T, go: ApiFunc<Q, R>): AsyncActionCreatorResponse<T, Q, R> {
 	return apiActionGroupFactory(apiActionGroupCreator(t), go)
 }
 

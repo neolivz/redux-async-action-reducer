@@ -1,6 +1,6 @@
 import { AsyncAction, SimpleAction } from '../actions'
 import { AsyncStore, AsyncReducer, isAsyncStore } from './async-reducer'
-import { SyncReducer } from './sync-reducer'
+import { SyncReducer, isSyncStore } from './sync-reducer'
 
 export interface Store<S> {
 	store: S | S[]
@@ -29,12 +29,17 @@ export function shouldReducerExecute(type: any | any[] | undefined, action: Simp
 		|| (typeof (type) === 'undefined')
 }
 
-export const createReducer = (syncReducers?: SyncReducer<any, any, any>[], asyncReducers?: (AsyncReducer<any, any, any, any>[])) => {
-	return (state: AsyncStore<any> | SimpleStore<any>, action: AsyncAction<any, any, any> | SimpleAction<any, any>) => {
+export const createReducer = (initialState: AsyncStore<any> | SimpleStore<any>, syncReducers?: SyncReducer<any, any, any>[], asyncReducers?: (AsyncReducer<any, any, any, any>[])) => {
+	return (state: AsyncStore<any> | SimpleStore<any> | any, action: AsyncAction<any, any, any> | SimpleAction<any, any>) => {
+		if (typeof (state) === 'undefined') {
+			state = initialState
+		}
 		// We invoke all the sync reducer
 		syncReducers && syncReducers.forEach((reducer) => {
 			// After each reducer new state will be assigned to state object
-			state = reducer(state, action)
+			if (isSyncStore(state)) {
+				state = reducer(state, action)
+			}
 		})
 
 		asyncReducers && asyncReducers.forEach((reducer) => {

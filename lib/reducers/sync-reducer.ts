@@ -12,6 +12,10 @@ export interface SyncReducerGenerator {
 	<T, Q, S>(type?: T, fn?: SyncReducerGeneratorFn<Q, S>): SyncReducer<T, Q, S>
 }
 
+export const isSyncStore = (store: any): store is SimpleStore<any> => {
+	return typeof (store) !== 'undefined' && store.hasOwnProperty('store')
+}
+
 const defaultSyncReducerFn = <Q, S>() => {
 	return (state: SimpleStore<S>, request: Q) => state
 }

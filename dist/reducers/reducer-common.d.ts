@@ -12,7 +12,7 @@ export interface ArrayStore<S> extends Store<S> {
 }
 export declare type Operations = 'C' | 'L' | 'U' | 'D';
 export declare function shouldReducerExecute(type: any | any[] | undefined, action: SimpleAction<any, any>): boolean;
-export declare const createReducer: (syncReducers?: SyncReducer<any, any, any>[] | undefined, asyncReducers?: AsyncReducer<any, any, any, any>[] | undefined) => (state: SimpleStore<any> | AsyncStore<any>, action: {
+export declare const createReducer: (initialState: SimpleStore<any> | AsyncStore<any>, syncReducers?: SyncReducer<any, any, any>[] | undefined, asyncReducers?: AsyncReducer<any, any, any, any>[] | undefined) => (state: any, action: {
     type: any;
 } | ({
     type: any;
@@ -40,4 +40,4 @@ export declare const createReducer: (syncReducers?: SyncReducer<any, any, any>[]
     type: any;
 } & {
     request: any;
-})) => SimpleStore<any> | AsyncStore<any>;
+})) => any;

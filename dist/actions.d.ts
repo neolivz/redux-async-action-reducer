@@ -42,7 +42,7 @@ export interface Dispatch<T, Q, R> {
 export interface Dispatcher<T, Q, R> {
     (dispatch: Dispatch<T, Q, R>): Promise<R>;
 }
-export interface AsyncActionCreatorReponse<T, Q, R> {
+export interface AsyncActionCreatorResponse<T, Q, R> {
     (request?: Q): Dispatcher<T, Q, R>;
 }
 export interface SimpleActionCreatorResponse<T, Q> {
@@ -52,18 +52,18 @@ export interface ApiFunc<Q, R> {
     (q?: Q): Promise<R>;
 }
 export interface AsynActionCreator<T, Q, R> {
-    (t: T, fn: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R>;
+    (t: T, fn: ApiFunc<Q, R>): AsyncActionCreatorResponse<T, Q, R>;
 }
 export interface SimpleActionCreator<T, Q> {
     (t: T): SimpleActionCreatorResponse<T, Q>;
 }
 export declare const hasActionRequest: <T, Q>(simpleAction: SimpleAction<T, Q>) => simpleAction is ActionType<T> & ActionRequest<Q>;
 export declare function apiActionGroupCreator<T, Q, R>(type: T): ApiActionGroup<T, Q, R>;
-export declare function apiActionGroupFactory<T, Q, R>(ag: ApiActionGroup<T, Q, R>, go: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R>;
-export declare function createAsyncAction<T, Q, R>(t: T, go: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R>;
+export declare function apiActionGroupFactory<T, Q, R>(ag: ApiActionGroup<T, Q, R>, go: ApiFunc<Q, R>): AsyncActionCreatorResponse<T, Q, R>;
+export declare function createAsyncAction<T, Q, R>(t: T, go: ApiFunc<Q, R>): AsyncActionCreatorResponse<T, Q, R>;
 export declare function createSimpleAction<T, Q>(type: T): SimpleActionCreatorResponse<T, Q>;
 declare const _default: {
-    createAsyncAction: <T, Q, R>(t: T, go: ApiFunc<Q, R>) => AsyncActionCreatorReponse<T, Q, R>;
+    createAsyncAction: <T, Q, R>(t: T, go: ApiFunc<Q, R>) => AsyncActionCreatorResponse<T, Q, R>;
     createSimpleAction: <T, Q>(type: T) => SimpleActionCreatorResponse<T, Q>;
 };
 export default _default;
