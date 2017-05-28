@@ -1,6 +1,6 @@
 {
-  "name": "redux-thunk-action-reducer",
-  "version": "0.3.4",
+  "name": "redux-async-action-reducer",
+  "version": "0.4.1",
   "description": "Redux Action Reducer with redux thunk",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neolivz/redux-thunk-action-reducer.git"
+    "url": "git+https://github.com/neolivz/redux-async-action-reducer.git"
   },
   "keywords": [
     "redux",
