@@ -1,5 +1,5 @@
-import actions from '../actions'
-import { SimpleActionCreatorResponse, AsyncActionCreatorReponse, ApiFunc } from '../actions'
+import actions from './actions'
+import { SimpleActionCreatorResponse, AsyncActionCreatorReponse, ApiFunc } from './actions'
 
 const { createAsyncAction, createSimpleAction } = actions
 

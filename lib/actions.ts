@@ -21,7 +21,8 @@ export type ActionStatusFailure = { status: FAILURE }
 export type ActionError = { error: Error }
 export type ActionType<T> = { type: T }
 
-export type SimpleAction<T, Q> = ActionType<T> | (ActionType<T> & ActionRequest<Q>)
+export type SimpleActionWithRequest<T, Q> = (ActionType<T> & ActionRequest<Q>)
+export type SimpleAction<T, Q> = ActionType<T> | SimpleActionWithRequest<T, Q>
 export type ActionSuccess<T, Q, R> = ActionStatusSuccess & ActionType<T> & ActionRequest<Q> & ActionResponse<R>
 export type ActionFailure<T, Q> = ActionStatusFailure & ActionType<T> & ActionRequest<Q> & ActionError
 export type ActionStarted<T, Q> = ActionStatusStarted & ActionType<T> & ActionRequest<Q>
@@ -60,6 +61,13 @@ export interface AsynActionCreator<T, Q, R> {
 export interface SimpleActionCreator<T, Q> {
 	(t: T): SimpleActionCreatorResponse<T, Q>
 }
+
+// helper methods for type check
+export const hasActionRequest = <T, Q>(simpleAction: SimpleAction<T, Q>): simpleAction is SimpleActionWithRequest<T, Q> => {
+	return simpleAction.hasOwnProperty('request')
+}
+
+// main apis
 
 export function apiActionGroupCreator<T, Q, R>(type: T): ApiActionGroup<T, Q, R> {
 	return {

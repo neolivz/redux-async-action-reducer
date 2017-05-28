@@ -25,7 +25,8 @@ export declare type ActionError = {
 export declare type ActionType<T> = {
     type: T;
 };
-export declare type SimpleAction<T, Q> = ActionType<T> | (ActionType<T> & ActionRequest<Q>);
+export declare type SimpleActionWithRequest<T, Q> = (ActionType<T> & ActionRequest<Q>);
+export declare type SimpleAction<T, Q> = ActionType<T> | SimpleActionWithRequest<T, Q>;
 export declare type ActionSuccess<T, Q, R> = ActionStatusSuccess & ActionType<T> & ActionRequest<Q> & ActionResponse<R>;
 export declare type ActionFailure<T, Q> = ActionStatusFailure & ActionType<T> & ActionRequest<Q> & ActionError;
 export declare type ActionStarted<T, Q> = ActionStatusStarted & ActionType<T> & ActionRequest<Q>;
@@ -56,6 +57,7 @@ export interface AsynActionCreator<T, Q, R> {
 export interface SimpleActionCreator<T, Q> {
     (t: T): SimpleActionCreatorResponse<T, Q>;
 }
+export declare const hasActionRequest: <T, Q>(simpleAction: SimpleAction<T, Q>) => simpleAction is ActionType<T> & ActionRequest<Q>;
 export declare function apiActionGroupCreator<T, Q, R>(type: T): ApiActionGroup<T, Q, R>;
 export declare function apiActionGroupFactory<T, Q, R>(ag: ApiActionGroup<T, Q, R>, go: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R>;
 export declare function createAsyncAction<T, Q, R>(t: T, go: ApiFunc<Q, R>): AsyncActionCreatorReponse<T, Q, R>;

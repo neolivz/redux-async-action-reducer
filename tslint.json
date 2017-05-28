@@ -7,6 +7,9 @@
         "trailing-comma": [
             true
         ],
-        "ter-indent": [true, "tab"]
+        "ter-indent": [true, "tab"],
+        "one-variable-per-declaration": [
+            false
+        ]
     }
 }

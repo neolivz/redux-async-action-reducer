@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const actions_1 = require("../actions");
+const actions_1 = require("./actions");
 const { createAsyncAction, createSimpleAction } = actions_1.default;
 // actions.createSimpleAction
 describe('Create Simple Action', () => {

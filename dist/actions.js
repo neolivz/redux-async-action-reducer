@@ -3,6 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.STARTED = 'STARTED';
 exports.SUCCESS = 'SUCCESS';
 exports.FAILURE = 'FAILURE';
+// helper methods for type check
+exports.hasActionRequest = (simpleAction) => {
+    return simpleAction.hasOwnProperty('request');
+};
+// main apis
 function apiActionGroupCreator(type) {
     return {
         request: (request) => ({ type, status: exports.STARTED, request, }),

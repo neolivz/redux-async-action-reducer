@@ -1,19 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const actions_1 = require("./actions");
+const actions_1 = require("../actions");
+const reducer_common_1 = require("./reducer-common");
 exports.initialState = {
     failure: false,
     working: false,
     completed: false,
     store: undefined,
 };
-exports.initialActiveState = Object.assign({}, exports.initialState, { open: false });
-function defaultSyncReducerFn() {
-    const fn = (state) => {
-        return state;
-    };
-    return fn;
-}
+exports.isAsyncStore = (store) => {
+    return store.hasOwnProperty('working');
+};
 function defaultStartReducerFn() {
     const startFn = (state) => {
         return Object.assign({}, state, { failure: false, working: true, completed: false, started: new Date(), finished: undefined });
@@ -32,20 +29,10 @@ function defaultFailureReducerFn() {
     };
     return failureFn;
 }
-exports.syncReducerGenerator = (type, fn) => {
-    return (state, action) => {
-        if (type !== action.type) {
-            return state;
-        }
-        else {
-            return fn(state, action.request);
-        }
-    };
-};
 exports.asyncReducerGenerator = (type, startFn = defaultStartReducerFn(), successFn = defaultSuccessReducerFn(), failureFn = defaultFailureReducerFn()) => {
     return (state, action) => {
         // If type is undefined we invoke it for every action
-        if (type !== action.type && typeof (type) !== 'undefined') {
+        if (!reducer_common_1.shouldReducerExecute(type, action)) {
             return state;
         }
         else if (action.status === actions_1.STARTED) {
@@ -77,45 +64,26 @@ exports.arrayAsyncLoadReducerGenerator = (t) => {
     return exports.asyncReducerGenerator(t, defaultStartReducerFn(), successFn, defaultFailureReducerFn());
 };
 exports.arrayAsyncUpdateReducerGenerator = (t) => {
-    const successFn = (state, response, request) => {
-        const store = [
-            ...state.store.slice(0, state.store.indexOf(request)),
+    const successFn = (state, request, response) => {
+        // if the entry not found we don't update anything
+        const store = state.store.indexOf(request[0]) > -1 ? [
+            ...state.store.slice(0, state.store.indexOf(request[0])),
             response,
-            ...state.store.slice(state.store.indexOf(request) + 1, state.store.length),
-        ];
+            ...state.store.slice(state.store.indexOf(request[0]) + 1, state.store.length),
+        ] : state.store;
         return Object.assign({}, state, { failure: false, working: false, completed: true, store });
     };
     return exports.asyncReducerGenerator(t, defaultStartReducerFn(), successFn, defaultFailureReducerFn());
 };
 exports.arrayAsyncDeleteReducerGenerator = (t) => {
     const successFn = (state, request, response) => {
-        const store = [
+        // If the entry is not found we don't delete anything
+        const store = state.store.indexOf(request) > -1 ? [
             ...state.store.slice(0, state.store.indexOf(request)),
             ...state.store.slice(state.store.indexOf(request) + 1, state.store.length),
-        ];
+        ] : state.store;
         return Object.assign({}, state, { failure: false, working: false, store });
     };
     return exports.asyncReducerGenerator(t, defaultStartReducerFn(), successFn, defaultFailureReducerFn());
 };
-exports.createReducer = (syncReducers, asyncReducers) => {
-    return (state, action) => {
-        // We invoke all the sync reducer
-        syncReducers && syncReducers.forEach((reducer) => {
-            // After each reducer new state will be assigned to state object
-            state = reducer(state, action);
-        });
-        asyncReducers && asyncReducers.forEach((reducer) => {
-            // If state is not AsynStore we should not invoke async reducers
-            if (state.hasOwnProperty('working')) {
-                // If it has working property at root level state is AsynStore
-                state = reducer(state, action);
-            }
-            else {
-                // We log the error, don't
-                console.error('State is not AsyncStore', state);
-            }
-        });
-        return state;
-    };
-};
-//# sourceMappingURL=reducers.js.map
+//# sourceMappingURL=async-reducer.js.map
