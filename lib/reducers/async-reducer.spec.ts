@@ -6,12 +6,12 @@ import {
 	AsyncReducerGeneratorFn,
 	AsyncReducer,
 	AsyncStore,
-	arrayAsyncCreateReducerGenerator,
-	arrayAsyncDeleteReducerGenerator,
-	arrayAsyncLoadReducerGenerator,
-	arrayAsyncUpdateReducerGenerator,
+	arrayAsyncCreateReducer,
+	arrayAsyncDeleteReducer,
+	arrayAsyncLoadReducer,
+	arrayAsyncUpdateReducer,
 	asyncReducerGenerator,
-	simpleAsyncReducerGenerator,
+	asyncReducer,
 	initialState,
 } from './async-reducer'
 
@@ -215,7 +215,7 @@ describe('Async Reducer Generator Fn With optional functions', () => {
 describe('Simple Async Reducer Generator Fn', () => {
 	let reducer: AsyncReducer<any, any, any, any>
 	beforeEach(() => {
-		reducer = simpleAsyncReducerGenerator('ANY')
+		reducer = asyncReducer('ANY')
 	})
 
 	it('should get start fn output', () => {
@@ -238,7 +238,7 @@ describe('Simple Async Reducer Generator Fn', () => {
 describe('Async Array Reducer: Create', () => {
 	let reducer: AsyncReducer<any, any, any, any>
 	beforeEach(() => {
-		reducer = arrayAsyncCreateReducerGenerator('ANY')
+		reducer = arrayAsyncCreateReducer('ANY')
 	})
 
 	it('should get start fn output', () => {
@@ -264,7 +264,7 @@ describe('Async Array Reducer: Create', () => {
 describe('Async Array Reducer: Read/Load', () => {
 	let reducer: AsyncReducer<any, any, any, any>
 	beforeEach(() => {
-		reducer = arrayAsyncLoadReducerGenerator('ANY')
+		reducer = arrayAsyncLoadReducer('ANY')
 	})
 
 	it('should get start fn output', () => {
@@ -290,10 +290,10 @@ describe('Async Array Reducer: Read/Load', () => {
 describe('Async Array Reducer: Delete', () => {
 	let reducer: AsyncReducer<any, any, any, any>
 	const store = ['Response1', 'Response2', 'Response3']
-	let tempStore = arrayAsyncLoadReducerGenerator<any, any, any, any>('ANY')(initialState,
+	let tempStore = arrayAsyncLoadReducer<any, any, any, any>('ANY')(initialState,
 		{ type: 'ANY', request: undefined, status: 'SUCCESS', response: store })
 	beforeEach(() => {
-		reducer = arrayAsyncDeleteReducerGenerator('ANY')
+		reducer = arrayAsyncDeleteReducer('ANY')
 	})
 
 	it('should get start fn output', () => {
@@ -322,10 +322,10 @@ describe('Async Array Reducer: Delete', () => {
 describe('Async Array Update: Update', () => {
 	let reducer: AsyncReducer<any, any, any, any>
 	const store = ['Response1', 'Response2', 'Response3']
-	let tempStore = arrayAsyncLoadReducerGenerator<any, any, any, any>('ANY')(initialState,
+	let tempStore = arrayAsyncLoadReducer<any, any, any, any>('ANY')(initialState,
 		{ type: 'ANY', request: undefined, status: 'SUCCESS', response: store })
 	beforeEach(() => {
-		reducer = arrayAsyncUpdateReducerGenerator('ANY')
+		reducer = arrayAsyncUpdateReducer('ANY')
 	})
 
 	it('should get start fn output', () => {

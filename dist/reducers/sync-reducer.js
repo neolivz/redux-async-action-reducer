@@ -28,14 +28,14 @@ exports.syncReducer = (type) => {
     // and generic spread (https://github.com/Microsoft/TypeScript/pull/13288) TS 2.4
     return exports.syncReducerGenerator(type, (state, query) => (Object.assign({}, state, { store: query })));
 };
-exports.arraySyncCreateReducerGenerator = (type) => {
+exports.arraySyncCreateReducer = (type) => {
     return exports.syncReducerGenerator(type, (state, query) => {
         return typeof (query) !== 'undefined' ? (state.store === undefined ? Object.assign({}, state, { store: [query] }) : Object.assign({}, state, { store: [...state.store, query] }))
             : state;
     });
 };
-exports.arraySyncLoadReducerGenerator = exports.syncReducer;
-exports.arraySyncDeleteReducerGenerator = (type) => {
+exports.arraySyncLoadReducer = exports.syncReducer;
+exports.arraySyncDeleteReducer = (type) => {
     return exports.syncReducerGenerator(type, (state, query) => {
         return typeof (query) === 'undefined'
             || !Array.isArray(state.store)
@@ -46,17 +46,8 @@ exports.arraySyncDeleteReducerGenerator = (type) => {
             ] });
     });
 };
-exports.arraySyncUpdateReducerGenerator = (type) => {
+exports.arraySyncUpdateReducer = (type) => {
     const reducerGenFn = (state, query) => {
-        // const newState = { ...state }
-        // I guess another typescript bug,
-        // so for the time being manual update
-        // if (Array.isArray(query) && Array.isArray(newState.store)) {
-        // 	if (newState.store.indexOf(query[0]) > -1) {
-        // 		newState.store[newState.store.indexOf(query[0])] = query[1]
-        // 	}
-        // }
-        // return newState
         return typeof (query) === 'undefined'
             || !Array.isArray(state.store)
             || !Array.isArray(query)

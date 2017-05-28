@@ -6,10 +6,10 @@ import { initialState } from './async-reducer'
 import {
 	syncReducerGenerator,
 	syncReducer,
-	arraySyncCreateReducerGenerator,
-	arraySyncLoadReducerGenerator,
-	arraySyncDeleteReducerGenerator,
-	arraySyncUpdateReducerGenerator,
+	arraySyncCreateReducer,
+	arraySyncLoadReducer,
+	arraySyncDeleteReducer,
+	arraySyncUpdateReducer,
 } from './sync-reducer'
 describe('Sync Reducer Generator ', () => {
 	const reducer = syncReducerGenerator()
@@ -36,7 +36,7 @@ describe('Sync Reducer Generator', () => {
 	})
 })
 describe('Sync Create Array Reducer Generator', () => {
-	const reducer = arraySyncCreateReducerGenerator()
+	const reducer = arraySyncCreateReducer()
 	it('should create', () => {
 		expect(reducer(initialState, { type: 'DOES_NOT_MATTER', request: 'Test' })).toEqual({ ...initialState, store: ['Test'] })
 	})
@@ -50,7 +50,7 @@ describe('Sync Create Array Reducer Generator', () => {
 	})
 })
 describe('Sync Create Array Reducer Generator with type', () => {
-	const reducer = arraySyncCreateReducerGenerator('TEST')
+	const reducer = arraySyncCreateReducer('TEST')
 	it('should create', () => {
 		expect(reducer(initialState, { type: 'TEST', request: 'Test' })).toEqual({ ...initialState, store: ['Test'] })
 	})
@@ -68,7 +68,7 @@ describe('Sync Create Array Reducer Generator with type', () => {
 	})
 })
 describe('Sync Load Array Reducer Generator with type', () => {
-	const reducer = arraySyncLoadReducerGenerator('TEST')
+	const reducer = arraySyncLoadReducer('TEST')
 	it('should create', () => {
 		expect(reducer(initialState, { type: 'TEST', request: ['Test'] })).toEqual({ ...initialState, store: ['Test'] })
 	})
@@ -86,7 +86,7 @@ describe('Sync Load Array Reducer Generator with type', () => {
 	})
 })
 describe('Sync Delete Array Reducer Generator with type', () => {
-	const reducer = arraySyncDeleteReducerGenerator('TEST')
+	const reducer = arraySyncDeleteReducer('TEST')
 	it('should do nothing', () => {
 		expect(reducer(initialState, { type: 'TEST', request: 'Test' })).toEqual({ ...initialState })
 	})
@@ -136,7 +136,7 @@ describe('Sync Delete Array Reducer Generator with type', () => {
 	})
 })
 describe('Sync Delete Array Reducer Generator with type', () => {
-	const reducer = arraySyncUpdateReducerGenerator('TEST')
+	const reducer = arraySyncUpdateReducer('TEST')
 	it('should do nothing', () => {
 		expect(reducer(initialState, { type: 'TEST', request: 'Test' })).toEqual( initialState )
 	})
@@ -151,7 +151,7 @@ describe('Sync Delete Array Reducer Generator with type', () => {
 
 })
 describe('Sync Delete Array Reducer Generator without', () => {
-	const reducer = arraySyncUpdateReducerGenerator()
+	const reducer = arraySyncUpdateReducer()
 	it('should do nothing', () => {
 		expect(reducer(initialState, { type: 'TEST', request: 'Test' })).toEqual( initialState )
 	})

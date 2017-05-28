@@ -47,23 +47,23 @@ exports.asyncReducerGenerator = (type, startFn = defaultStartReducerFn(), succes
         return state;
     };
 };
-exports.simpleAsyncReducerGenerator = (t) => {
+exports.asyncReducer = (t) => {
     return exports.asyncReducerGenerator(t, defaultStartReducerFn(), defaultSuccessReducerFn(), defaultFailureReducerFn());
 };
-exports.arrayAsyncCreateReducerGenerator = (t) => {
+exports.arrayAsyncCreateReducer = (t) => {
     const successFn = (state, request, response) => {
         const store = state.store ? [...state.store, response] : [response];
         return Object.assign({}, state, { failure: false, working: false, completed: true, store });
     };
     return exports.asyncReducerGenerator(t, defaultStartReducerFn(), successFn, defaultFailureReducerFn());
 };
-exports.arrayAsyncLoadReducerGenerator = (t) => {
+exports.arrayAsyncLoadReducer = (t) => {
     const successFn = (state, request, response) => {
         return Object.assign({}, state, { failure: false, working: false, completed: true, store: response });
     };
     return exports.asyncReducerGenerator(t, defaultStartReducerFn(), successFn, defaultFailureReducerFn());
 };
-exports.arrayAsyncUpdateReducerGenerator = (t) => {
+exports.arrayAsyncUpdateReducer = (t) => {
     const successFn = (state, request, response) => {
         // if the entry not found we don't update anything
         const store = state.store.indexOf(request[0]) > -1 ? [
@@ -75,7 +75,7 @@ exports.arrayAsyncUpdateReducerGenerator = (t) => {
     };
     return exports.asyncReducerGenerator(t, defaultStartReducerFn(), successFn, defaultFailureReducerFn());
 };
-exports.arrayAsyncDeleteReducerGenerator = (t) => {
+exports.arrayAsyncDeleteReducer = (t) => {
     const successFn = (state, request, response) => {
         // If the entry is not found we don't delete anything
         const store = state.store.indexOf(request) > -1 ? [

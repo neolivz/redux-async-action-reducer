@@ -31,7 +31,7 @@ describe('Sync Reducer Generator', () => {
     });
 });
 describe('Sync Create Array Reducer Generator', () => {
-    const reducer = sync_reducer_1.arraySyncCreateReducerGenerator();
+    const reducer = sync_reducer_1.arraySyncCreateReducer();
     it('should create', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'DOES_NOT_MATTER', request: 'Test' })).toEqual(Object.assign({}, async_reducer_1.initialState, { store: ['Test'] }));
     });
@@ -43,7 +43,7 @@ describe('Sync Create Array Reducer Generator', () => {
     });
 });
 describe('Sync Create Array Reducer Generator with type', () => {
-    const reducer = sync_reducer_1.arraySyncCreateReducerGenerator('TEST');
+    const reducer = sync_reducer_1.arraySyncCreateReducer('TEST');
     it('should create', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'TEST', request: 'Test' })).toEqual(Object.assign({}, async_reducer_1.initialState, { store: ['Test'] }));
     });
@@ -58,7 +58,7 @@ describe('Sync Create Array Reducer Generator with type', () => {
     });
 });
 describe('Sync Load Array Reducer Generator with type', () => {
-    const reducer = sync_reducer_1.arraySyncLoadReducerGenerator('TEST');
+    const reducer = sync_reducer_1.arraySyncLoadReducer('TEST');
     it('should create', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'TEST', request: ['Test'] })).toEqual(Object.assign({}, async_reducer_1.initialState, { store: ['Test'] }));
     });
@@ -73,7 +73,7 @@ describe('Sync Load Array Reducer Generator with type', () => {
     });
 });
 describe('Sync Delete Array Reducer Generator with type', () => {
-    const reducer = sync_reducer_1.arraySyncDeleteReducerGenerator('TEST');
+    const reducer = sync_reducer_1.arraySyncDeleteReducer('TEST');
     it('should do nothing', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'TEST', request: 'Test' })).toEqual(Object.assign({}, async_reducer_1.initialState));
     });
@@ -112,7 +112,7 @@ describe('Sync Delete Array Reducer Generator with type', () => {
     });
 });
 describe('Sync Delete Array Reducer Generator with type', () => {
-    const reducer = sync_reducer_1.arraySyncUpdateReducerGenerator('TEST');
+    const reducer = sync_reducer_1.arraySyncUpdateReducer('TEST');
     it('should do nothing', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'TEST', request: 'Test' })).toEqual(async_reducer_1.initialState);
     });
@@ -124,7 +124,7 @@ describe('Sync Delete Array Reducer Generator with type', () => {
     });
 });
 describe('Sync Delete Array Reducer Generator without', () => {
-    const reducer = sync_reducer_1.arraySyncUpdateReducerGenerator();
+    const reducer = sync_reducer_1.arraySyncUpdateReducer();
     it('should do nothing', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'TEST', request: 'Test' })).toEqual(async_reducer_1.initialState);
     });

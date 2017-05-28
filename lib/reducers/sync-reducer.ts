@@ -42,7 +42,8 @@ export const syncReducer: SyncReducerGenerator = <T, Q>(
 	// and generic spread (https://github.com/Microsoft/TypeScript/pull/13288) TS 2.4
 	return syncReducerGenerator<T, Q, Q>(type, (state, query) => ({ ...state, store: query }))
 }
-export const arraySyncCreateReducerGenerator: SyncReducerGenerator = <T, Q>(
+
+export const arraySyncCreateReducer: SyncReducerGenerator = <T, Q>(
 	type?: T) => {
 	return syncReducerGenerator<T, Q, Q[]>(type, (state, query) => {
 		return typeof (query) !== 'undefined' ? (state.store === undefined ?
@@ -51,9 +52,10 @@ export const arraySyncCreateReducerGenerator: SyncReducerGenerator = <T, Q>(
 			: state
 	})
 }
-export const arraySyncLoadReducerGenerator: SyncReducerGenerator = syncReducer
 
-export const arraySyncDeleteReducerGenerator: SyncReducerGenerator = <T, Q>(
+export const arraySyncLoadReducer: SyncReducerGenerator = syncReducer
+
+export const arraySyncDeleteReducer: SyncReducerGenerator = <T, Q>(
 	type?: T) => {
 	return syncReducerGenerator<T, Q, Q[]>(type, (state, query) => {
 		return typeof (query) === 'undefined'
@@ -70,18 +72,9 @@ export const arraySyncDeleteReducerGenerator: SyncReducerGenerator = <T, Q>(
 	})
 }
 
-export const arraySyncUpdateReducerGenerator: SyncReducerGenerator = <T, Q>(
+export const arraySyncUpdateReducer: SyncReducerGenerator = <T, Q>(
 	type?: T) => {
 	const reducerGenFn: SyncReducerGeneratorFn<Q[], Q[]> = (state: SimpleStore<Q[]>, query: Q[]) => {
-		// const newState = { ...state }
-		// I guess another typescript bug,
-		// so for the time being manual update
-		// if (Array.isArray(query) && Array.isArray(newState.store)) {
-		// 	if (newState.store.indexOf(query[0]) > -1) {
-		// 		newState.store[newState.store.indexOf(query[0])] = query[1]
-		// 	}
-		// }
-		// return newState
 		return typeof (query) === 'undefined'
 			|| !Array.isArray(state.store)
 			|| !Array.isArray(query)

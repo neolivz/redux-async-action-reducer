@@ -24,8 +24,8 @@ export interface AsyncReducerGenerator {
 export declare const initialState: AsyncStore<any>;
 export declare const isAsyncStore: (store: any) => store is AsyncStore<any>;
 export declare const asyncReducerGenerator: AsyncReducerGenerator;
-export declare const simpleAsyncReducerGenerator: AsyncReducerGenerator;
-export declare const arrayAsyncCreateReducerGenerator: AsyncReducerGenerator;
-export declare const arrayAsyncLoadReducerGenerator: AsyncReducerGenerator;
-export declare const arrayAsyncUpdateReducerGenerator: AsyncReducerGenerator;
-export declare const arrayAsyncDeleteReducerGenerator: AsyncReducerGenerator;
+export declare const asyncReducer: AsyncReducerGenerator;
+export declare const arrayAsyncCreateReducer: AsyncReducerGenerator;
+export declare const arrayAsyncLoadReducer: AsyncReducerGenerator;
+export declare const arrayAsyncUpdateReducer: AsyncReducerGenerator;
+export declare const arrayAsyncDeleteReducer: AsyncReducerGenerator;

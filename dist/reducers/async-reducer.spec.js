@@ -135,7 +135,7 @@ describe('Async Reducer Generator Fn With optional functions', () => {
 describe('Simple Async Reducer Generator Fn', () => {
     let reducer;
     beforeEach(() => {
-        reducer = async_reducer_1.simpleAsyncReducerGenerator('ANY');
+        reducer = async_reducer_1.asyncReducer('ANY');
     });
     it('should get start fn output', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'ANY', request: undefined, status: 'STARTED' })).toMatchObject(Object.assign({}, async_reducer_1.initialState, { working: true, completed: false, failure: false }));
@@ -150,7 +150,7 @@ describe('Simple Async Reducer Generator Fn', () => {
 describe('Async Array Reducer: Create', () => {
     let reducer;
     beforeEach(() => {
-        reducer = async_reducer_1.arrayAsyncCreateReducerGenerator('ANY');
+        reducer = async_reducer_1.arrayAsyncCreateReducer('ANY');
     });
     it('should get start fn output', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'ANY', request: undefined, status: 'STARTED' })).toMatchObject(Object.assign({}, async_reducer_1.initialState, { working: true, completed: false, failure: false }));
@@ -167,7 +167,7 @@ describe('Async Array Reducer: Create', () => {
 describe('Async Array Reducer: Read/Load', () => {
     let reducer;
     beforeEach(() => {
-        reducer = async_reducer_1.arrayAsyncLoadReducerGenerator('ANY');
+        reducer = async_reducer_1.arrayAsyncLoadReducer('ANY');
     });
     it('should get start fn output', () => {
         expect(reducer(async_reducer_1.initialState, { type: 'ANY', request: undefined, status: 'STARTED' })).toMatchObject(Object.assign({}, async_reducer_1.initialState, { working: true, completed: false, failure: false }));
@@ -184,9 +184,9 @@ describe('Async Array Reducer: Read/Load', () => {
 describe('Async Array Reducer: Delete', () => {
     let reducer;
     const store = ['Response1', 'Response2', 'Response3'];
-    let tempStore = async_reducer_1.arrayAsyncLoadReducerGenerator('ANY')(async_reducer_1.initialState, { type: 'ANY', request: undefined, status: 'SUCCESS', response: store });
+    let tempStore = async_reducer_1.arrayAsyncLoadReducer('ANY')(async_reducer_1.initialState, { type: 'ANY', request: undefined, status: 'SUCCESS', response: store });
     beforeEach(() => {
-        reducer = async_reducer_1.arrayAsyncDeleteReducerGenerator('ANY');
+        reducer = async_reducer_1.arrayAsyncDeleteReducer('ANY');
     });
     it('should get start fn output', () => {
         expect(reducer(tempStore, { type: 'ANY', request: undefined, status: 'STARTED' })).toMatchObject(Object.assign({}, tempStore, { working: true, completed: false, failure: false, store }));
@@ -204,9 +204,9 @@ describe('Async Array Reducer: Delete', () => {
 describe('Async Array Update: Update', () => {
     let reducer;
     const store = ['Response1', 'Response2', 'Response3'];
-    let tempStore = async_reducer_1.arrayAsyncLoadReducerGenerator('ANY')(async_reducer_1.initialState, { type: 'ANY', request: undefined, status: 'SUCCESS', response: store });
+    let tempStore = async_reducer_1.arrayAsyncLoadReducer('ANY')(async_reducer_1.initialState, { type: 'ANY', request: undefined, status: 'SUCCESS', response: store });
     beforeEach(() => {
-        reducer = async_reducer_1.arrayAsyncUpdateReducerGenerator('ANY');
+        reducer = async_reducer_1.arrayAsyncUpdateReducer('ANY');
     });
     it('should get start fn output', () => {
         expect(reducer(tempStore, { type: 'ANY', request: ['Response2', undefined], status: 'STARTED' })).toMatchObject(Object.assign({}, tempStore, { working: true, completed: false, failure: false, store }));

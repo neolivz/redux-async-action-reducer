@@ -12,7 +12,7 @@ export interface SyncReducerGenerator {
 export declare const isSyncStore: (store: any) => store is SimpleStore<any>;
 export declare const syncReducerGenerator: SyncReducerGenerator;
 export declare const syncReducer: SyncReducerGenerator;
-export declare const arraySyncCreateReducerGenerator: SyncReducerGenerator;
-export declare const arraySyncLoadReducerGenerator: SyncReducerGenerator;
-export declare const arraySyncDeleteReducerGenerator: SyncReducerGenerator;
-export declare const arraySyncUpdateReducerGenerator: SyncReducerGenerator;
+export declare const arraySyncCreateReducer: SyncReducerGenerator;
+export declare const arraySyncLoadReducer: SyncReducerGenerator;
+export declare const arraySyncDeleteReducer: SyncReducerGenerator;
+export declare const arraySyncUpdateReducer: SyncReducerGenerator;

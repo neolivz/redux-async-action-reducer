@@ -48,12 +48,14 @@ function defaultStartReducerFn<Q, R, S>() {
 	}
 	return startFn
 }
+
 function defaultSuccessReducerFn<Q, R, S>() {
 	const successFn: AsyncReducerGeneratorFn<Q, R, S> = <R>(state: AsyncStore<R>, request: Q, response: R) => {
 		return { ...state, failure: false, working: false, completed: true, store: response, finished: new Date() }
 	}
 	return successFn
 }
+
 function defaultFailureReducerFn<Q, R, S>() {
 	const failureFn: AsyncReducerGeneratorFn<Q, R, S> = <R>(state: AsyncStore<R>, request: R, response: any, error: Error) => {
 		return { ...state, failure: true, working: false, completed: false, finished: new Date(), error }
@@ -81,11 +83,11 @@ export const asyncReducerGenerator: AsyncReducerGenerator = <T, Q, R, S>(
 	}
 }
 
-export const simpleAsyncReducerGenerator: AsyncReducerGenerator = <T, Q, R>(t: T) => {
+export const asyncReducer: AsyncReducerGenerator = <T, Q, R>(t: T) => {
 	return asyncReducerGenerator<T, Q, R, R>(t, defaultStartReducerFn<Q, R, R>(), defaultSuccessReducerFn<Q, R, R>(), defaultFailureReducerFn<Q, R, R>())
 }
 
-export const arrayAsyncCreateReducerGenerator: AsyncReducerGenerator = <T, Q, R>(t: T) => {
+export const arrayAsyncCreateReducer: AsyncReducerGenerator = <T, Q, R>(t: T) => {
 	const successFn: AsyncReducerGeneratorFn<Q, R, R[]> = (state: AsyncStore<R[]>, request: Q, response: R) => {
 		const store = state.store ? [...state.store, response] : [response]
 		return { ...state, failure: false, working: false, completed: true, store }
@@ -93,14 +95,14 @@ export const arrayAsyncCreateReducerGenerator: AsyncReducerGenerator = <T, Q, R>
 	return asyncReducerGenerator<T, Q, R, R[]>(t, defaultStartReducerFn<Q, R, R[]>(), successFn, defaultFailureReducerFn<Q, R, R[]>())
 }
 
-export const arrayAsyncLoadReducerGenerator: AsyncReducerGenerator = <T, Q, R>(t: T) => {
+export const arrayAsyncLoadReducer: AsyncReducerGenerator = <T, Q, R>(t: T) => {
 	const successFn: AsyncReducerGeneratorFn<Q, R[], R[]> = (state: AsyncStore<R[]>, request: Q, response: R[]) => {
 		return { ...state, failure: false, working: false, completed: true, store: response }
 	}
 	return asyncReducerGenerator<T, Q, R[], R[]>(t, defaultStartReducerFn<Q, R[], R[]>(), successFn, defaultFailureReducerFn<Q, R[], R[]>())
 }
 
-export const arrayAsyncUpdateReducerGenerator: AsyncReducerGenerator = <T, R>(t?: T) => {
+export const arrayAsyncUpdateReducer: AsyncReducerGenerator = <T, R>(t?: T) => {
 
 	const successFn: AsyncReducerGeneratorFn<R[], R, R[]> = (state: AsyncStore<R[]>, request: R[], response: R) => {
 		// if the entry not found we don't update anything
@@ -115,7 +117,7 @@ export const arrayAsyncUpdateReducerGenerator: AsyncReducerGenerator = <T, R>(t?
 	return asyncReducerGenerator<T, R[], R, R[]>(t, defaultStartReducerFn<R[], R, R[]>(), successFn, defaultFailureReducerFn<R[], R, R[]>())
 }
 
-export const arrayAsyncDeleteReducerGenerator: AsyncReducerGenerator = <T, R>(t?: T) => {
+export const arrayAsyncDeleteReducer: AsyncReducerGenerator = <T, R>(t?: T) => {
 	const successFn: AsyncReducerGeneratorFn<R, any, R[]> = (state: AsyncStore<R[]>, request: R, response: any) => {
 		// If the entry is not found we don't delete anything
 		const store: R[] = state.store.indexOf(request) > -1 ? [
