@@ -1,6 +1,6 @@
 {
   "name": "redux-async-action-reducer",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Redux Action Reducer with redux thunk",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

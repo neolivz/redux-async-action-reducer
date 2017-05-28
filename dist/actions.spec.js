@@ -12,7 +12,7 @@ describe('Create Simple Action', () => {
         simpleNone = createSimpleAction('TOGGLE');
         simpleString = createSimpleAction('CREATE');
         simpleNumber = createSimpleAction('NUMBER');
-        simpleObject = createSimpleAction('OBJECT'); 
+        simpleObject = createSimpleAction('OBJECT');
     });
     it('should create simple action', () => {
         expect(simpleNone()).toEqual({ type: 'TOGGLE' });
