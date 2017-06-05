@@ -1,13 +1,13 @@
 # redux-thunk-action-reducer
 
 ## Introduction
-Simple redux action creation and reducer wrapper that makes creating and handling asynchronous and synchronous wrapper easier. It's completely written with type safety in mind, with typescript.
+A simple wrapper for creating redux actions and reducers. The library makes creating and handling both asynchronous and synchronous actions easier. It's completely written, with type safety in mind, with typescript.
 
 ## Actions/ Action Creator
-Action creator can either create either synchronous or asynchronous. For more general information about actions refer to [redux docs](http://redux.js.org/docs/basics/Actions.html)
+Action creator can either create a synchronous action or an asynchronous action. For more general information about actions refer to [redux docs](http://redux.js.org/docs/basics/Actions.html)
 
 ### Asynchronous Action
-Asynchronous Action are designed to work with libraries like redux-thunk or redux-saga.
+Asynchronous Actions are actions that will invoke an api and are designed to work with libraries like redux-thunk or redux-saga.
 
 Traditional way of creating asynchronous action
 ```typescript
@@ -17,7 +17,7 @@ import { ACTION_TYPE, STARTED, SUCCEEDED, FAILURE } from '../constants'
 const action = (dispatch) => {
 	(request) => {
 		dispatch({ type: ACTION_TYPE, status: STARTED, request })
-		api().then((response) => {
+		api(request).then((response) => {
 			dispatch({ type: ACTION_TYPE, status: SUCCEEDED, request, response})
 		}).catch((error)=>{
 			dispatch({ type: ACTION_TYPE, status: FAILURE, request, error})
@@ -58,10 +58,10 @@ const action = createSimpleAction(ACTION_TYPE);
 const action = createSimpleAction<ACTION_TYPE, RequestType>(ACTION_TYPE);
 
 ```
-** Use  of request and response is convenient and consistent across synchronous and asynchronous actions **
+*Use  of request and response is convenient and consistent across synchronous and asynchronous actions rather than using payload for request*
 
 ## Reducers
-Reducer can also be either synchronous or asynchronous. Asynchronous reducer need an asynchronous action while synchronous reducer can act up on both asynchronous and synchronous actions. For more general information about reducers refer to [redux docs](http://redux.js.org/docs/basics/Reducers.html)
+Reducer can also be either synchronous or asynchronous. Asynchronous reducer need an asynchronous action while synchronous reducer can act up on both synchronous and asynchronous actions. For more general information about reducers refer to [redux docs](http://redux.js.org/docs/basics/Reducers.html)
 
 Traditional way of creating a reducer is using switch cases
 ```typescript
@@ -79,7 +79,6 @@ const reducer = createReducer(initialState,
 )
 ```
 
-
 *NOTE: As a side effect a synchronous reducer acting upon asynchronous action will be called 3 times. Future version will support synchronous action status reducer*
 
 
@@ -90,21 +89,22 @@ import { ACTION_TYPE, STARTED, SUCCEEDED, FAILURE } from '../constants'
 
 const actionTypeReducer = (state, action){
 	if(action.status === STARTED){
-		{...state, working: true, failure: false, completed: false, started: new Date(), finished: undefined}
+		return {...state, working: true, failure: false, completed: false, started: new Date(), finished: undefined}
 	} else if(action.status === SUCCEEDED){
-		{...state, working: false, failure: false, completed: true, store: action.response}
+		return {...state, working: false, failure: false, completed: true, store: action.response}
 	} else if( action.status === FAILURE){
-		{...state, working: false, failure: true, completed: false, finished: new Date()}
+		return {...state, working: false, failure: true, completed: false, finished: new Date()}
 	}
 	return state
 }
 const reducer  = (state = initialState, action) => {
 	switch(action.type){
-		case 'ACTION_TYPE': actionTypeReducer(state, action)
+		case 'ACTION_TYPE': state = actionTypeReducer(state, action)
 		//
 		// more switch cases for reducers
 		//
 	}
+	return state
 }
 ```
 can be replaced with
@@ -119,10 +119,7 @@ const reducer = createReducer(initialState, [/*synchronous reducers*/],
 ```
 
 
-
-
 ### Synchronous Reducer
-Synchronous reducer does act upon 
 Traditional way of creating synchronous reducer
 ```typescript
 import { ACTION_TYPE } from '../constants'
@@ -153,10 +150,10 @@ const reducer = createReducer(initialState,
 ## Array Reducers
 When a store is an array object we can use array reducer. It supports CLUD (Load instead of Read) apis. Both synchronous and asynchronous support full CLUD operations on array reducers.
 
-## Create 
+### Create 
 Adding an element into the array 
 
-### Synchronous 
+#### Synchronous 
 ```typescript
 import { arraySyncCreateReducer } from 'redux-async-action-reducer'
 
@@ -165,7 +162,7 @@ const reducer = createReducer(initialState,
 )
 // This will add request object into array
 ```
-### Asynchronous 
+#### Asynchronous 
 ```typescript
 import { arrayAsyncCreateReducer } from 'redux-async-action-reducer'
 
@@ -176,9 +173,9 @@ const reducer = createReducer(initialState,
 ```
 *NOTE: If your create API does not give response object which need to be added, change the response object to what ever you want to add*
 
-## Read/Load
+### Read/Load
 Load all elements into the array
-### Synchronous 
+#### Synchronous 
 ```typescript
 import { arraySyncLoadReducer } from 'redux-async-action-reducer'
 
@@ -187,7 +184,7 @@ const reducer = createReducer(initialState,
 )
 // This will load RequestType[] into store
 ```
-### Asynchronous 
+#### Asynchronous 
 ```typescript
 import { arrayAsyncLoadReducer } from 'redux-async-action-reducer'
 
@@ -197,9 +194,9 @@ const reducer = createReducer(initialState,
 // This will load ResponseType[] into store
 ```
 
-## Update
+### Update
 Load all elements into the array
-### Synchronous 
+#### Synchronous 
 ```typescript
 import { arraySyncUpdateReducer } from 'redux-async-action-reducer'
 
@@ -214,7 +211,7 @@ const updateArray: RequestType[] = [originalObject, updatedObject]
 action(updateArray) //store.dispatch(action(updateArray))
 
 ```
-### Asynchronous 
+#### Asynchronous 
 ```typescript
 import { arrayAsyncUpdateReducer } from 'redux-async-action-reducer'
 
@@ -230,9 +227,9 @@ action(updateArray) //store.dispatch(action(updateArray))
 ```
 
 
-## Delete
+### Delete
 Load all elements into the array
-### Synchronous 
+#### Synchronous 
 ```typescript
 import { arraySyncDeleteReducer } from 'redux-async-action-reducer'
 
@@ -241,7 +238,7 @@ const reducer = createReducer(initialState,
 )
 // This will load RequestType[] into store
 ```
-### Asynchronous 
+#### Asynchronous 
 ```typescript
 import { arrayAsyncDeleteReducer } from 'redux-async-action-reducer'
 
@@ -250,3 +247,52 @@ const reducer = createReducer(initialState,
 )
 // Action need to be invoked with request object of the element which needs to be removed from the array
 ```
+
+## Status Reducer
+Status reducer is reducer who acts upon on status change of all or a list of action types.
+Traditional way of doing it
+```typescript
+import { ACTION_TYPE, STARTED, SUCCEEDED, FAILURE } from '../constants'
+
+const actionTypeReducer = (state, action){
+	//for all actions remove the following line
+	if(['ACTION_TYPE1','ACTION_TYPE2', 'ACTION_TYPE3'/*etc*/].indexOf(action.type) === -1) {
+		return state
+	} else if(action.status === STARTED){
+		return {...state, working: true, failure: false, completed: false, started: new Date(), finished: undefined}
+	} else if(action.status === SUCCEEDED){
+		return {...state, working: false, failure: false, completed: true, store: action.response}
+	} else if( action.status === FAILURE){
+		return {...state, working: false, failure: true, completed: false, finished: new Date()}
+	} else {
+		return state
+	}
+}
+const reducer  = (state = initialState, action) => {
+	actionTypeReducer(state, action)
+	switch(action.type){
+		//
+		// more switch cases for reducers
+		//
+	}
+}
+```
+
+can be replaced with 
+```typescript
+import { arrayAsyncLoadReducer } from 'redux-async-action-reducer'
+type ACTION_TYPE = 'ACTION_TYPE1' | 'ACTION_TYPE2' | 'ACTION_TYPE3' //eg only
+const reducer = createReducer(initialState,
+  [asyncReducer<ACTION_TYPE[], RequestType, ResponseType>(['ACTION_TYPE1','ACTION_TYPE2','ACTION_TYPE3']), /*more reducers*/],[/*asynchronous reducers if needed*/]
+)
+
+//or all for all actions
+const reducer = createReducer(initialState,
+  [asyncReducer<ACTION_TYPE, RequestType, ResponseType>(), /*more reducers*/],[/*asynchronous reducers if needed*/]
+)
+
+```
+
+
+## See also
+The library takes starting inspiration from [redux-actions](https://github.com/acdlite/redux-actions).
